@@ -2,11 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { init } from 'd2'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let baseUrl = process.env.REACT_APP_DHIS2_BASE_URL;
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+if (!baseUrl) {
+    console.warn('Set the environment variable `REACT_APP_DHIS2_BASE_URL` to your DHIS2 instance to override localhost:8080!');
+    baseUrl = 'http://localhost:8085';
+}
+
+init({baseUrl: baseUrl + '/api/29'})
+    .then(d2 => {
+        ReactDOM.render(<App d2={d2}/>, document.getElementById('root'));
+    })
+    .catch(err => console.error(err));

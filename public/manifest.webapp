@@ -1,0 +1,29 @@
+{
+    "version": "0.1",
+    "name": "Bulletin Mensuel De Paludisme Exportateur",
+    "description": "Exports the monthly malaria bulletin",
+    "launch_path": "index.html",
+    "appType": "APP",
+    "icons": {
+        "16": "assets/icons/16.png",
+        "48": "assets/icons/48.png",
+        "128": "assets/icons/128.png"
+    },
+    "developer": {
+        "name": "Adam Preston",
+        "url": "https://www.rti.org"
+    },
+    "default_locale": "en",
+    "activities": {
+        "dhis": {
+            "href": "*",
+            "namespace": "bulletin"
+        }
+    },
+    "authorities": [
+         "MY_APP_ADD_NEW",
+         "MY_APP_UPDATE",
+         "MY_APP_DELETE"
+         ]
+    
+}
