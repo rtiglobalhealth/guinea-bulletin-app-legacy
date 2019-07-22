@@ -11,7 +11,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "package": "react-scripts build && cd build && zip dhis2-app.zip -r *"
   },
   "eslintConfig": {
     "extends": "react-app"
