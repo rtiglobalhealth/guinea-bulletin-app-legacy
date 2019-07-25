@@ -1,11 +1,13 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
 
-import {TwoPanel} from '@dhis2/d2-ui-core';
+
 import {SinglePanel} from '@dhis2/d2-ui-core';
 import {MainContent} from '@dhis2/d2-ui-core';
-import {Sidebar} from '@dhis2/d2-ui-core';
+
 import {Heading} from '@dhis2/d2-ui-core';
+
+import {PeriodPicker} from '@dhis2/d2-ui-core';
 
 import Buttons from './button';
 
@@ -14,13 +16,13 @@ const styles = {
     paper: {
         padding: '2rem',
         minHeight: '300px',
+        marginTop: '4rem',
     },
     twoPanelMain: {
         marginTop: '2rem',
     },
-    singlePanelMain: {
+    singlePanelMain: { 
         marginTop: 0,
-        
     },
 };
 
@@ -34,8 +36,18 @@ export default function LayoutExample (props) {
                 <MainContent>
                     <Paper style={styles.paper}>
                         <Heading>
-                        Bulletin Mensuel De Paludisme Exportateur
+
+                        <h2>Bulletin Mensuel De Paludisme Exportateur</h2>
+                        <p>Cette application est utilisée pour exporter le rapport mensuel sur le paludisme sous forme de document Microsoft Word. Pour commencer, sélectionnez le mois et le bouton.</p>
                         </Heading>
+
+                        <PeriodPicker
+                                periodType="Monthly"
+                                onPickPeriod={(value) => {
+                                    //this.setState({  });
+                                    console.info(`New value: ${value}`);
+                                }}
+                            />
 
                         <Buttons />
 

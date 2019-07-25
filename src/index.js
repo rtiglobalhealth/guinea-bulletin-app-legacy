@@ -9,6 +9,7 @@ import { init, config, getUserSettings, getManifest } from 'd2';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import appTheme from './theme';
 
+import './styles.scss';
  
 getManifest('manifest.webapp')
     .then((manifest) => {
