@@ -1,18 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import log from 'loglevel';
 import App from './App';
-import { init } from 'd2'
 
-let baseUrl = process.env.REACT_APP_DHIS2_BASE_URL;
 
-if (!baseUrl) {
-    console.warn('Set the environment variable `REACT_APP_DHIS2_BASE_URL` to your DHIS2 instance to override localhost:8080!');
-    baseUrl = 'http://localhost:8085';
-}
+import { init, config, getUserSettings, getManifest } from 'd2';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import appTheme from './theme';
 
-init({baseUrl: baseUrl + '/api/29'})
-    .then(d2 => {
-        ReactDOM.render(<App d2={d2}/>, document.getElementById('root'));
+ 
+getManifest('manifest.webapp')
+    .then((manifest) => {
+        const baseUrl = manifest.getBaseUrl();
+        config.baseUrl = `${baseUrl}/api/26`;
+        log.info(`Loading: ${manifest.name} v${manifest.version}`);
+        log.info(`Built ${manifest.manifest_generated_at}`);
     })
-    .catch(err => console.error(err));
+    .then(getUserSettings)
+    .then(init)
+    .then((d2) => {
+        // App init
+        log.info('D2 initialized', d2);
+        window.d2 = d2;
+
+        ReactDOM.render(
+            <MuiThemeProvider muiTheme={appTheme}><App d2={d2} /></MuiThemeProvider>,
+            document.getElementById('app'),
+        );
+    });
