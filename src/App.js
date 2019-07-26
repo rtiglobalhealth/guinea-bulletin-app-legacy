@@ -5,8 +5,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './App.css';
 
-
-import PeriodPicker from './components/period-picker';
 import Layout from './components/layout';
 import HeaderBarExample from './components/header-bar';
 
@@ -28,17 +26,15 @@ class App extends Component {
 
   render() {
       if (!this.state.d2) {
-          console.log('no');
+          console.log('no d2');
           return null;
       }
 
       return (
           <D2UIApp>
               <MuiThemeProvider theme={createMuiTheme(dhis2theme)}>
-                  
                   <HeaderBarExample d2={this.state.d2} />
                     <Layout />
-
               </MuiThemeProvider>
           </D2UIApp>
       );

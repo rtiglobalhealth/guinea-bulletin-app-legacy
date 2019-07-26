@@ -4,7 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@dhis2/d2-ui-core": "v6.1.1",
+    "@dhis2/d2-ui-core": "^6.1.1",
     "@dhis2/d2-ui-expression-manager": "v6.1.1",
     "@dhis2/d2-ui-favorites-dialog": "v6.1.1",
     "@dhis2/d2-ui-file-menu": "v6.1.1",
@@ -21,7 +21,10 @@
     "@dhis2/d2-ui-table": "v6.1.1",
     "@dhis2/d2-ui-translation-dialog": "v6.1.1",
     "d2": "^31.7",
+    "docxtemplater": "^3.14.0",
+    "file-saver": "^2.0.2",
     "node-sass": "4.12.0",
+    "pizzip": "^3.0.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1"
@@ -31,7 +34,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "package": "react-scripts build && cd build && zip dhis2-app.zip -r *"
+    "package": "react-scripts build && cd build && zip bulletin-app.zip -r *"
   },
   "eslintConfig": {
     "extends": "react-app"

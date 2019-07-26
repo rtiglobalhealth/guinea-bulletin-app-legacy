@@ -967,7 +967,7 @@
     i18next "^10.3"
     moment "^2.24.0"
 
-"@dhis2/d2-ui-core@6.1.1", "@dhis2/d2-ui-core@v6.1.1":
+"@dhis2/d2-ui-core@6.1.1", "@dhis2/d2-ui-core@^6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@dhis2/d2-ui-core/-/d2-ui-core-6.1.1.tgz#c0ef84ff3267e4645989cf538ca3e4a8ab4a4c0e"
   integrity sha512-+r8n07NXnolbFQyGKpxP02HBFP26/vueAEmAkiUYBSkZxj5IzuAmMlJB55kRTvkS2DO52mitGWaBPFfgrrAlHA==
@@ -4121,6 +4121,13 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+docxtemplater@^3.14.0:
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/docxtemplater/-/docxtemplater-3.14.0.tgz#7d070816e995b3d70ad8181e9727b40f0d05ca1f"
+  integrity sha512-PPnkqDb3LVTD1gr/9uY9VKFc0iGzamtJ7G7vQ29NstIG+4sWtaUDwXOD+o94rQ9C/7r90vKnWcNu2tmb70Y46Q==
+  dependencies:
+    xmldom "^0.1.27"
+
 dom-converter@^0.2:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/dom-converter/-/dom-converter-0.2.0.tgz#6721a9daee2e293682955b6afe416771627bb768"
@@ -4878,6 +4885,11 @@ file-loader@3.0.1:
   dependencies:
     loader-utils "^1.0.2"
     schema-utils "^1.0.0"
+
+file-saver@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-2.0.2.tgz#06d6e728a9ea2df2cce2f8d9e84dfcdc338ec17a"
+  integrity sha512-Wz3c3XQ5xroCxd1G8b7yL0Ehkf0TC9oYC6buPFkNnU9EnaPlifeAFCyCh+iewXTyFRcg0a6j3J7FmJsIhlhBdw==
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -8472,7 +8484,7 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-pako@~1.0.5:
+pako@~1.0.2, pako@~1.0.5:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
   integrity sha512-0DTvPVU3ed8+HNXOu5Bs+o//Mbdj9VNQMUOe9oKCwh8l0GNwpTDMKCWbRjgtD291AWnkAgkqA/LOnQS8AmS1tw==
@@ -8676,6 +8688,13 @@ pirates@^4.0.1:
   integrity sha512-WuNqLTbMI3tmfef2TKxlQmAiLHKtFhlsCZnPIpuv2Ow0RDVO8lfy1Opf4NUzlMXLjPl+Men7AuVdX6TA+s+uGA==
   dependencies:
     node-modules-regexp "^1.0.0"
+
+pizzip@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/pizzip/-/pizzip-3.0.5.tgz#6413553f97661e3d825a5ac93b45d561dcae28fb"
+  integrity sha512-khSFKx1H9aypC6mtoY66b//aIHQPXQhE2gh45hvG4lXPUdLiAwtXLv02xb11EfvKkhFvHWSJAiPvrxrXi/kjAQ==
+  dependencies:
+    pako "~1.0.2"
 
 pkg-dir@^1.0.0:
   version "1.0.0"
@@ -12252,6 +12271,11 @@ xmlcreate@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xmlcreate/-/xmlcreate-2.0.1.tgz#2ec38bd7b708d213fd1a90e2431c4af9c09f6a52"
   integrity sha512-MjGsXhKG8YjTKrDCXseFo3ClbMGvUD4en29H2Cev1dv4P/chlpw6KdYmlCWDkhosBVKRDjM836+3e3pm1cBNJA==
+
+xmldom@^0.1.27:
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
+  integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
 
 xregexp@4.0.0:
   version "4.0.0"

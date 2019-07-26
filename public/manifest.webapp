@@ -1,5 +1,5 @@
 {
-    "version": "0.2",
+    "version": "0.3",
     "name": "Bulletin Mensuel De Paludisme Exportateur",
     "description": "Exports the monthly malaria bulletin",
     "launch_path": "index.html",
