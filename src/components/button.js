@@ -1,12 +1,10 @@
 import React from 'react';
-
 import {Button} from '@dhis2/d2-ui-core';
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip'
 import PizZipUtils from 'pizzip/utils'
 
 import { saveAs } from 'file-saver';
-
 
 const style = {
     margin: 16,
@@ -22,14 +20,17 @@ function loadFile(url,callback){
 }
 
 function generate() {
+  
+    console.log("this is the date dropdown value: " );
+
     loadFile("./assets/templates/bulletin.v1.docx",function(error,content){
         
         if (error) { throw error };
         var zip = new PizZip(content);
         var doc=new Docxtemplater().loadZip(zip)
         doc.setData({
-            first_name: 'John',
-            last_name: 'Doe',
+            month: 'May',
+            year: '2019',
             phone: '0652455478',
             description: 'New Website'
         });
@@ -63,7 +64,7 @@ function handleClick(e) {
     }
 
 
-export default function Buttons() {
+export default function Buttons(props) {
     return (
         <div style={style}>
             <Button onClick={handleClick}>Générer le bulletin</Button>

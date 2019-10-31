@@ -5,7 +5,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './App.css';
 
-import Layout from './components/layout';
+import BulletinDownloader from './components/BulletinDownloader';
 import HeaderBarExample from './components/header-bar';
 
 import { App as D2UIApp, mui3theme as dhis2theme } from '@dhis2/d2-ui-core';
@@ -30,11 +30,16 @@ class App extends Component {
           return null;
       }
 
+      // for fun, print all users to the console log, probably doens't need to stay
+      this.state.d2.models.user.list().then(userCollection => {
+            userCollection.forEach(user => console.log(user.name));
+      });
+      
       return (
           <D2UIApp>
               <MuiThemeProvider theme={createMuiTheme(dhis2theme)}>
                   <HeaderBarExample d2={this.state.d2} />
-                    <Layout />
+                    <BulletinDownloader />
               </MuiThemeProvider>
           </D2UIApp>
       );
