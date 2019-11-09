@@ -45,11 +45,8 @@ export default class BulletinDownloader extends React.Component {
         }; 
 
         this.generateBulletin = this.generateBulletin.bind(this);
-
     }
 
-
-    
     generateBulletin() {
       
         console.log("this is the date: " + this.state.period );
@@ -125,7 +122,7 @@ export default class BulletinDownloader extends React.Component {
                     dataElements[ dataelement[0] ] = dataelement[3]; 
                 }
 
-                console.log("this is the cases consulted: " + dataElements['XJ3xpfnj2L7']);
+                console.log("this is the total deaths: " + dataElements['oD8UXdUBhb2']);
 
                 PizZipUtils.getBinaryContent("./assets/templates/bulletin.v1.docx",function(error,content){
             
@@ -135,13 +132,46 @@ export default class BulletinDownloader extends React.Component {
                     doc.setData({
                         month: month_name,
                         year: year,
-                        XJ3xpfnj2L7: dataElements['XJ3xpfnj2L7'],
-                        hxx05dDDpQS: dataElements['hxx05dDDpQS'],
-                        hqxo1DPKsvM: dataElements['hqxo1DPKsvM'],
-                        FoPRfIPds80: dataElements['FoPRfIPds80'],
-                        bdifvrbc9iK: dataElements['bdifvrbc9iK'],
-                        E1n9SUkhQ6o: dataElements['E1n9SUkhQ6o'],
-                        oD8UXdUBhb2: dataElements['oD8UXdUBhb'],
+                        // Table I
+                        XJ3xpfnj2L7: parseInt(dataElements['XJ3xpfnj2L7']),
+                        hxx05dDDpQS: parseInt(dataElements['hxx05dDDpQS']),
+                        hqxo1DPKsvM: parseInt(dataElements['hqxo1DPKsvM']),
+                        FoPRfIPds80: parseInt(dataElements['FoPRfIPds80']),
+                        bdifvrbc9iK: parseInt(dataElements['bdifvrbc9iK']),
+                        E1n9SUkhQ6o: parseInt(dataElements['E1n9SUkhQ6o']),
+                        oD8UXdUBhb2: parseInt(dataElements['oD8UXdUBhb2']),
+                        // Table II
+                        hc1_name: 'Banama',
+                        hc1_district: 'Kissidougou',
+                        hc1_incidence: '618',
+                        hc2_name: 'Banama',
+                        hc2_district: 'Kissidougou',
+                        hc2_incidence: '618',
+                        hc3_name: 'Banama',
+                        hc3_district: 'Kissidougou',
+                        hc3_incidence: '618',
+                        hc4_name: 'Banama',
+                        hc4_district: 'Kissidougou',
+                        hc4_incidence: '618',
+                        hc5_name: 'Banama',
+                        hc5_district: 'Kissidougou',
+                        hc5_incidence: '618',
+                        hc6_name: 'Banama',
+                        hc6_district: 'Kissidougou',
+                        hc6_incidence: '618',
+                        hc7_name: 'Banama',
+                        hc7_district: 'Kissidougou',
+                        hc7_incidence: '618',
+                        hc8_name: 'Banama',
+                        hc8_district: 'Kissidougou',
+                        hc8_incidence: '618',
+                        hc9_name: 'Banama',
+                        hc9_district: 'Kissidougou',
+                        hc9_incidence: '618',
+                        hc10_name: 'Banama',
+                        hc10_district: 'Kissidougou',
+                        hc10_incidence: '618',
+
                     });
                     try {
                         // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
@@ -166,16 +196,10 @@ export default class BulletinDownloader extends React.Component {
                 })
 
               });
-              
-
-
-       
-       
     }
 
 
     render() {
-
 
         return (
 
