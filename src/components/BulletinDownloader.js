@@ -30,26 +30,21 @@ const styles = {
 
 
 export default class BulletinDownloader extends React.Component {
-    getChildContext() {
-        return {
-            d2: this.props.d2
-        };
-    }
 
     constructor(props, context) {
 
         super(props, context);
-
         this.state = {
-            period: 201804
+            d2: props.d2,
         }; 
-
+    
         this.generateBulletin = this.generateBulletin.bind(this);
     }
 
     generateBulletin() {
       
         console.log("this is the date: " + this.state.period );
+        
         var year = this.state.period.substring(0, 4);
         var month = this.state.period.substring(4);
         var month_name;
@@ -95,107 +90,110 @@ export default class BulletinDownloader extends React.Component {
                 month_name ="Unknown";
         } 
 
-        // Get Table I
-        const req = new this.props.d2.analytics.request()
+        //const d2Analytics = this.props.d2.analytics.request();
+        const table1 = new this.props.d2.analytics.request()
                         .addDataDimension([
-                        'XJ3xpfnj2L7', // Palu cas consultations toutes causes confondues
-                        'hxx05dDDpQS', // Palu cas suspects 
-                        'hqxo1DPKsvM', //Palu cas testés
-                        'FoPRfIPds80', //Palu cas confirmés 
-                        'bdifvrbc9iK', //Palu cas simples traités 
-                        'E1n9SUkhQ6o', //Palu cas graves traités 
-                        'oD8UXdUBhb2', //Palu Total Déces 
+                            'XJ3xpfnj2L7', // Palu cas consultations toutes causes confondues
+                            'hxx05dDDpQS', // Palu cas suspects 
+                            'hqxo1DPKsvM', //Palu cas testés
+                            'FoPRfIPds80', //Palu cas confirmés 
+                            'bdifvrbc9iK', //Palu cas simples traités 
+                            'E1n9SUkhQ6o', //Palu cas graves traités 
+                            'oD8UXdUBhb2', //Palu Total Déces 
                     ]).addPeriodDimension(this.state.period)
                         .addOrgUnitDimension(['Ky2CzFdfBuO']);
+       
+        const table2 = new this.props.d2.analytics.request()
+                        .addDataDimension([
+                            'zysVdk7PbUx', // palu incidence
+                            'q6tFawArvTX', // Population couverte
+                            'FoPRfIPds80', // Palu cas confirmés
+                            
+                    ]).addPeriodDimension(this.state.period)
+                        .addOrgUnitDimension([
+                            'kM65X9dP5WS', // CSU de Boffa
+                            'i1xnNAyKgGG' // CSR de Kamabi 
+                    ]);
+        
 
-        this.props.d2.analytics.aggregate
-            .get(req)
+        var d2 = this.props.d2;
+
+        var period = { month: month_name, year: year};
+
+        // Get data for table I
+        d2.analytics.aggregate
+            .get(table1)
             .then(function(analyticsData) {
-                console.log(analyticsData);
-                //var body = JSON.parse(analyticsData);
+                
                 var body = analyticsData;
                 var dataElements = {};
                 
+                console.log("retrieving " +body.rows.length + " rows for Table I");
+            
                 //shove all this into a object for reading later.
                 for (var i = 0; i < body.rows.length; i++) {
                     var dataelement = body.rows[i];
                     dataElements[ dataelement[0] ] = dataelement[3]; 
                 }
 
-                console.log("this is the total deaths: " + dataElements['oD8UXdUBhb2']);
+                return dataElements;
+                
+            }).then(function(result){
+                
+                d2.analytics.aggregate
+                    .get(table2)
+                    .then(function(analyticsData) {
+                        //console.log(analyticsData);
+                        var body = analyticsData;
+                        var table2_result = {};
+                        
+                        console.log("retrieving " +body.rows.length + " rows for Table II");
 
-                PizZipUtils.getBinaryContent("./assets/templates/bulletin.v1.docx",function(error,content){
-            
-                    if (error) { throw error };
-                    var zip = new PizZip(content);
-                    var doc=new Docxtemplater().loadZip(zip)
-                    doc.setData({
-                        month: month_name,
-                        year: year,
-                        // Table I
-                        XJ3xpfnj2L7: parseInt(dataElements['XJ3xpfnj2L7']),
-                        hxx05dDDpQS: parseInt(dataElements['hxx05dDDpQS']),
-                        hqxo1DPKsvM: parseInt(dataElements['hqxo1DPKsvM']),
-                        FoPRfIPds80: parseInt(dataElements['FoPRfIPds80']),
-                        bdifvrbc9iK: parseInt(dataElements['bdifvrbc9iK']),
-                        E1n9SUkhQ6o: parseInt(dataElements['E1n9SUkhQ6o']),
-                        oD8UXdUBhb2: parseInt(dataElements['oD8UXdUBhb2']),
-                        // Table II
-                        hc1_name: 'Banama',
-                        hc1_district: 'Kissidougou',
-                        hc1_incidence: '618',
-                        hc2_name: 'Banama',
-                        hc2_district: 'Kissidougou',
-                        hc2_incidence: '618',
-                        hc3_name: 'Banama',
-                        hc3_district: 'Kissidougou',
-                        hc3_incidence: '618',
-                        hc4_name: 'Banama',
-                        hc4_district: 'Kissidougou',
-                        hc4_incidence: '618',
-                        hc5_name: 'Banama',
-                        hc5_district: 'Kissidougou',
-                        hc5_incidence: '618',
-                        hc6_name: 'Banama',
-                        hc6_district: 'Kissidougou',
-                        hc6_incidence: '618',
-                        hc7_name: 'Banama',
-                        hc7_district: 'Kissidougou',
-                        hc7_incidence: '618',
-                        hc8_name: 'Banama',
-                        hc8_district: 'Kissidougou',
-                        hc8_incidence: '618',
-                        hc9_name: 'Banama',
-                        hc9_district: 'Kissidougou',
-                        hc9_incidence: '618',
-                        hc10_name: 'Banama',
-                        hc10_district: 'Kissidougou',
-                        hc10_incidence: '618',
+                        //shove all this into a object for reading later.
+                        for (var i = 0; i < body.rows.length; i++) {
+                            var dataelement = body.rows[i];
+                            table2_result[ dataelement[0] ] = dataelement[3]; 
+                        }
+
+                        var bulletin_data = Object.assign({}, period, result,table2_result);
+
+                        console.log("Here are the final results: " , bulletin_data);
+                        
+                        // Write this out
+                        PizZipUtils.getBinaryContent("./assets/templates/bulletin.v1.docx",function(error,content){
+    
+                            var zip = new PizZip(content);
+                            var doc=new Docxtemplater().loadZip(zip);
+
+                            doc.setData(bulletin_data);
+
+                            try {
+                                // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+                                doc.render()
+                            }
+                            catch (error) {
+                                var e = {
+                                    message: error.message,
+                                    name: error.name,
+                                    stack: error.stack,
+                                    properties: error.properties,
+                                }
+                                console.log(JSON.stringify({error: e}));
+                                // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+                                throw error;
+                            }
+                            
+                            var out=doc.getZip().generate({
+                                type:"blob",
+                                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            }) //Output the document using Data-URI
+                            saveAs(out,"bulletin.docx")
+
+                        });
 
                     });
-                    try {
-                        // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-                        doc.render()
-                    }
-                    catch (error) {
-                        var e = {
-                            message: error.message,
-                            name: error.name,
-                            stack: error.stack,
-                            properties: error.properties,
-                        }
-                        console.log(JSON.stringify({error: e}));
-                        // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-                        throw error;
-                    }
-                    var out=doc.getZip().generate({
-                        type:"blob",
-                        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    }) //Output the document using Data-URI
-                    saveAs(out,"bulletin.docx")
-                })
-
-              });
+            })   
+        
     }
 
 
