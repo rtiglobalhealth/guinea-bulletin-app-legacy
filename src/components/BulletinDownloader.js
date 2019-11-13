@@ -41,6 +41,101 @@ export default class BulletinDownloader extends React.Component {
         this.generateBulletin = this.generateBulletin.bind(this);
     }
 
+    // Take in a bunch of random data and return something like this:
+    /*
+    {
+        hc1_name: "www",
+        hc1_district: "xxx",
+        hc1_incidence: "yyy", 
+        hc12_name: "zzz",
+        ...
+    }
+    */
+    static get_highest_incidence(districts){
+        return districts;
+    }
+
+     /*
+    {
+        hc1_name: "www",
+        hc1_district: "xxx",
+        hc1_incidence: "yyy", 
+        hc12_name: "zzz",
+        ...
+    }
+    */
+    static get_fake_table3(){
+
+        var obj = {
+            kal_com: "100%",
+            kal_dia: "104%",
+            kal_tr: "100%",
+            kal_tp: "27%",
+            
+            dix_com: "100%",
+            dix_dia: "100%",
+            dix_tr: "100%",
+            dix_tp: "17%",
+
+            mat_com: "100%",
+            mat_dia: "100%",
+            mat_tr: "100%",
+            mat_tp: "49%",
+
+            mot_com: "100%",
+            mot_dia: "100%",
+            mot_tr: "100%",
+            mot_tp: "51%",
+
+            rat_com: "100%",
+            rat_dia: "100%",
+            rat_tr: "100%",
+            rat_tp: "25%",
+            
+        }
+
+        return obj;
+    }
+
+    static get_fake_table2 ()
+    {   
+        // Table II
+        var obj = {
+            hc1_name: 'Banama',
+            hc1_district: 'Kissidougou',
+            hc1_incidence: '618',
+            hc2_name: 'SS Armées',
+            hc2_district: 'Macenta',
+            hc2_incidence: '504',
+            hc3_name: 'Nunkunkan',
+            hc3_district: 'Siguiri',
+            hc3_incidence: '500',
+            hc4_name: 'Mangalla',
+            hc4_district: 'Guéckédou',
+            hc4_incidence: '453',
+            hc5_name: 'Kindoye',
+            hc5_district: 'Dabola',
+            hc5_incidence: '410',
+            hc6_name: 'Bintimodia',
+            hc6_district: 'Boké',
+            hc6_incidence: '393',
+            hc7_name: 'Kantoumanina',
+            hc7_district: 'Mandiana',
+            hc7_incidence: '392',
+            hc8_name: 'Ouassou',
+            hc8_district: 'Dubréka',
+            hc8_incidence: '367',
+            hc9_name: 'Koundou',
+            hc9_district: 'Guéckédou',
+            hc9_incidence: '316',
+            hc10_name: 'Passaya',
+            hc10_district: 'Faranah',
+            hc10_incidence: '311'
+        }
+        return obj;
+    
+    }
+
     generateBulletin() {
       
         console.log("this is the date: " + this.state.period );
@@ -155,7 +250,11 @@ export default class BulletinDownloader extends React.Component {
                             table2_result[ dataelement[0] ] = dataelement[3]; 
                         }
 
-                        var bulletin_data = Object.assign({}, period, result,table2_result);
+                        var top10_table2 = BulletinDownloader.get_highest_incidence(table2_result);
+                        var fake_table2 = BulletinDownloader.get_fake_table2();
+                        var fake_table3 = BulletinDownloader.get_fake_table3();
+                        
+                        var bulletin_data = Object.assign({}, period, result,fake_table2,fake_table3);
 
                         console.log("Here are the final results: " , bulletin_data);
                         
