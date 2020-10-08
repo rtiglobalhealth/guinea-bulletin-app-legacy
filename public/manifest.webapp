@@ -1,7 +1,7 @@
 {
-    "version": "0.8",
+    "version": "0.8.1",
     "name": "Bulletin Mensuel De Paludisme Exportateur",
-    "description": "Exports the monthly malaria bulletin",
+    "description": "Exporte le bulletin mensuel sur le paludisme",
     "launch_path": "index.html",
     "appType": "APP",
     "icons": {
