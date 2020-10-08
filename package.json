@@ -23,7 +23,7 @@
     "d2": "^31.7",
     "docxtemplater": "^3.19.6",
     "file-saver": "^2.0.2",
-    "node-sass": "4.12.0",
+    "node-sass": "4.13.1",
     "pizzip": "^3.0.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
