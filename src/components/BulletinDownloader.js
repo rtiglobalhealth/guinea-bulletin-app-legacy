@@ -211,7 +211,48 @@ export default class BulletinDownloader extends React.Component {
                     ]);
         
 
+                    
+        const reporting_rates = new this.props.d2.analytics.request()
+            .addDataDimension([
+                'nLnLQHxdKXZ', // PALUDISME Actual reports
+                'w1666PUJ8RX', // PALUDISME Expected reports
+                'e7KyyoIukNr', // PALUDISME Reporting rate
+                'PEGmDlgS54M', // PALUDISME Reporting rate on time
+                
+        ]).addPeriodDimension(this.state.period)
+            .addOrgUnitDimension([
+                'D1rT7FToSE4', // Kankan
+                'yTNEihLzQwC', // Kindia
+                'zy5MQM2PlKb', // Labé
+                'QrHKMLcRSCA', // Faranah
+                'odY5MzWb1jc', // Conakry
+                'ZSEW310Xy6l', // Mamou
+                'ysKioL4gVnV', // Nzérékoré
+                'fxtOlL8b8mb', // Boké
+                'Ky2CzFdfBuO', // Guinea
+        ]);
+
         var d2 = this.props.d2;
+
+        var reporting_rates_table = {};
+
+        //get Reporting Rates
+        d2.analytics.aggregate
+            .get(reporting_rates)
+            .then(function(analyticsData) {
+
+                var body = analyticsData;
+                
+                console.log("retrieving " +body.rows.length + " rows for the reporting rates");
+                console.log("body" + body);
+                
+                //shove all this into a object for reading later.
+                 for (var i = 0; i < body.rows.length; i++) {
+                    var dataelement = body.rows[i];
+                    reporting_rates_table[ dataelement[1]+"."+dataelement[0] ] = dataelement[3]; 
+                }
+
+            });
 
         var period = { month: month_name, year: year};
 
@@ -254,7 +295,7 @@ export default class BulletinDownloader extends React.Component {
                         var fake_table2 = BulletinDownloader.get_fake_table2();
                         var fake_table3 = BulletinDownloader.get_fake_table3();
                         
-                        var bulletin_data = Object.assign({}, period, result,fake_table2,fake_table3);
+                        var bulletin_data = Object.assign({}, period, result,fake_table2,fake_table3,reporting_rates_table);
 
                         console.log("Here are the final results: " , bulletin_data);
                         
@@ -295,7 +336,6 @@ export default class BulletinDownloader extends React.Component {
         
     }
 
-
     render() {
 
         return (
@@ -317,6 +357,7 @@ export default class BulletinDownloader extends React.Component {
                                         }}
                                     />
                                 <Button raised color='primary' onClick={this.generateBulletin}>Générer le bulletin</Button>
+                                <Button raised color='accent' onClick={this.generateBulletin}>Unformatted</Button> 
                             </Paper>
                         </MainContent>
                     </SinglePanel>
