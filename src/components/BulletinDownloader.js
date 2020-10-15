@@ -14,6 +14,10 @@ import PizZipUtils from 'pizzip/utils'
 
 import { saveAs } from 'file-saver';
 
+const TEMPLATE_FORMATTED = "formatted";
+const TEMPLATE_UNFORMATTED = "unformatted";
+
+
 const styles = {
     paper: {
         padding: '2rem',
@@ -25,7 +29,9 @@ const styles = {
     },
     singlePanelMain: { 
         marginTop: 0,
-    },
+    },buttons:{
+        margin: '5px'
+    }
 };
 
 
@@ -36,6 +42,7 @@ export default class BulletinDownloader extends React.Component {
         super(props, context);
         this.state = {
             d2: props.d2,
+            buttons: ''
         }; 
     
         this.generateBulletin = this.generateBulletin.bind(this);
@@ -136,10 +143,12 @@ export default class BulletinDownloader extends React.Component {
     
     }
 
-    generateBulletin() {
+    generateBulletin(template) {
       
+        //console.log("this is the type of template: " + template );
         console.log("this is the date: " + this.state.period );
-        
+        console.log("this is the template: " + template );
+
         var year = this.state.period.substring(0, 4);
         var month = this.state.period.substring(4);
         var month_name;
@@ -211,7 +220,7 @@ export default class BulletinDownloader extends React.Component {
                     ]);
         
 
-                    
+
         const reporting_rates = new this.props.d2.analytics.request()
             .addDataDimension([
                 'nLnLQHxdKXZ', // PALUDISME Actual reports
@@ -255,6 +264,7 @@ export default class BulletinDownloader extends React.Component {
             });
 
         var period = { month: month_name, year: year};
+
 
         // Get data for table I
         d2.analytics.aggregate
@@ -300,7 +310,14 @@ export default class BulletinDownloader extends React.Component {
                         console.log("Here are the final results: " , bulletin_data);
                         
                         // Write this out
-                        PizZipUtils.getBinaryContent("./assets/templates/bulletin.v1.docx",function(error,content){
+
+                        var template_path = "./assets/templates/bulletin.v1.docx";
+                        
+                        if (template == TEMPLATE_UNFORMATTED){
+                            var template_path = "./assets/templates/test.v1.docx";
+                        } 
+
+                        PizZipUtils.getBinaryContent(template_path,function(error,content){
     
                             var zip = new PizZip(content);
                             var doc=new Docxtemplater().loadZip(zip);
@@ -356,9 +373,18 @@ export default class BulletinDownloader extends React.Component {
                                             console.info(`New value: ${value}`);
                                         }}
                                     />
-                                <Button raised color='primary' onClick={this.generateBulletin}>Générer le bulletin</Button>
-                                <Button raised color='accent' onClick={this.generateBulletin}>Unformatted</Button> 
-                            </Paper>
+
+                                        <Button style={styles.buttons} disabled={!this.state.period} raised color='primary' 
+                                            onClick={this.generateBulletin.bind(this, TEMPLATE_FORMATTED)}>
+                                                Générer le bulletin
+                                        </Button>
+                                        <Button style={styles.buttons} disabled={!this.state.period} raised color='accent' 
+                                            onClick={this.generateBulletin.bind(this, TEMPLATE_UNFORMATTED)}>
+                                                Générer le modèle
+                                        </Button>
+
+                                  
+                                 </Paper>
                         </MainContent>
                     </SinglePanel>
                 </div>
