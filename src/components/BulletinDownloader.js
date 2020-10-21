@@ -7,12 +7,18 @@ import PropTypes from 'prop-types';
 
 
 import {Heading} from '@dhis2/d2-ui-core';
+
 import {PeriodPicker} from '@dhis2/d2-ui-core';
+
+
+//import DangerPeriodPicker;
+
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip'
 import PizZipUtils from 'pizzip/utils'
 
 import { saveAs } from 'file-saver';
+
 
 const TEMPLATE_FORMATTED = "formatted";
 const TEMPLATE_UNFORMATTED = "unformatted";
@@ -42,107 +48,19 @@ export default class BulletinDownloader extends React.Component {
         super(props, context);
         this.state = {
             d2: props.d2,
-            buttons: ''
+            buttons: '',
+            table1: [],
+            table2: [],
+            table3: [],
+            report_rates_table: []
         }; 
-    
+
         this.generateBulletin = this.generateBulletin.bind(this);
     }
 
-    // Take in a bunch of random data and return something like this:
-    /*
-    {
-        hc1_name: "www",
-        hc1_district: "xxx",
-        hc1_incidence: "yyy", 
-        hc12_name: "zzz",
-        ...
-    }
-    */
-    static get_highest_incidence(districts){
-        return districts;
-    }
-
-     /*
-    {
-        hc1_name: "www",
-        hc1_district: "xxx",
-        hc1_incidence: "yyy", 
-        hc12_name: "zzz",
-        ...
-    }
-    */
-    static get_fake_table3(){
-
-        var obj = {
-            kal_com: "100%",
-            kal_dia: "104%",
-            kal_tr: "100%",
-            kal_tp: "27%",
-            
-            dix_com: "100%",
-            dix_dia: "100%",
-            dix_tr: "100%",
-            dix_tp: "17%",
-
-            mat_com: "100%",
-            mat_dia: "100%",
-            mat_tr: "100%",
-            mat_tp: "49%",
-
-            mot_com: "100%",
-            mot_dia: "100%",
-            mot_tr: "100%",
-            mot_tp: "51%",
-
-            rat_com: "100%",
-            rat_dia: "100%",
-            rat_tr: "100%",
-            rat_tp: "25%",
-            
-        }
-
-        return obj;
-    }
-
-    static get_fake_table2 ()
-    {   
-        // Table II
-        var obj = {
-            hc1_name: 'Banama',
-            hc1_district: 'Kissidougou',
-            hc1_incidence: '618',
-            hc2_name: 'SS Armées',
-            hc2_district: 'Macenta',
-            hc2_incidence: '504',
-            hc3_name: 'Nunkunkan',
-            hc3_district: 'Siguiri',
-            hc3_incidence: '500',
-            hc4_name: 'Mangalla',
-            hc4_district: 'Guéckédou',
-            hc4_incidence: '453',
-            hc5_name: 'Kindoye',
-            hc5_district: 'Dabola',
-            hc5_incidence: '410',
-            hc6_name: 'Bintimodia',
-            hc6_district: 'Boké',
-            hc6_incidence: '393',
-            hc7_name: 'Kantoumanina',
-            hc7_district: 'Mandiana',
-            hc7_incidence: '392',
-            hc8_name: 'Ouassou',
-            hc8_district: 'Dubréka',
-            hc8_incidence: '367',
-            hc9_name: 'Koundou',
-            hc9_district: 'Guéckédou',
-            hc9_incidence: '316',
-            hc10_name: 'Passaya',
-            hc10_district: 'Faranah',
-            hc10_incidence: '311'
-        }
-        return obj;
+  
     
-    }
-
+    /* templates can be TEMPLATE_FORMATTED or TEMPLATE_UNFORMATTED*/
     generateBulletin(template) {
       
         //console.log("this is the type of template: " + template );
@@ -192,7 +110,9 @@ export default class BulletinDownloader extends React.Component {
                 break;
             default:
                 month_name ="Unknown";
-        } 
+        };
+
+        var period = { month: month_name, year: year};
 
         //const d2Analytics = this.props.d2.analytics.request();
         const table1 = new this.props.d2.analytics.request()
@@ -207,27 +127,14 @@ export default class BulletinDownloader extends React.Component {
                     ]).addPeriodDimension(this.state.period)
                         .addOrgUnitDimension(['Ky2CzFdfBuO']);
        
-        const table2 = new this.props.d2.analytics.request()
-                        .addDataDimension([
-                            'zysVdk7PbUx', // palu incidence
-                            'q6tFawArvTX', // Population couverte
-                            'FoPRfIPds80', // Palu cas confirmés
-                            
-                    ]).addPeriodDimension(this.state.period)
-                        .addOrgUnitDimension([
-                            'kM65X9dP5WS', // CSU de Boffa
-                            'i1xnNAyKgGG' // CSR de Kamabi 
-                    ]);
-        
-
+       
 
         const reporting_rates = new this.props.d2.analytics.request()
             .addDataDimension([
                 'nLnLQHxdKXZ', // PALUDISME Actual reports
                 'w1666PUJ8RX', // PALUDISME Expected reports
                 'e7KyyoIukNr', // PALUDISME Reporting rate
-                'PEGmDlgS54M', // PALUDISME Reporting rate on time
-                
+                'PEGmDlgS54M', // PALUDISME Reporting rate on time  
         ]).addPeriodDimension(this.state.period)
             .addOrgUnitDimension([
                 'D1rT7FToSE4', // Kankan
@@ -241,115 +148,107 @@ export default class BulletinDownloader extends React.Component {
                 'Ky2CzFdfBuO', // Guinea
         ]);
 
+        //const d2Analytics = this.props.d2.analytics.request();
+        const table3 = new this.props.d2.analytics.request()
+                        .addDataDimension([
+                            'XJ3xpfnj2L7', // Palu cas consultations toutes causes confondues
+                            'hxx05dDDpQS', // Palu cas suspects 
+                            'hqxo1DPKsvM', //Palu cas testés
+                            'FoPRfIPds80', //Palu cas confirmés 
+                            'bdifvrbc9iK', //Palu cas simples traités 
+                            'E1n9SUkhQ6o', //Palu cas graves traités 
+                            'oD8UXdUBhb2', //Palu Total Déces 
+                    ]).addPeriodDimension(this.state.period)
+                        .addOrgUnitDimension(['Ky2CzFdfBuO']);
+       
+
         var d2 = this.props.d2;
 
-        var reporting_rates_table = {};
 
-        //get Reporting Rates
+        // Get data for reporting table
         d2.analytics.aggregate
-            .get(reporting_rates)
-            .then(function(analyticsData) {
+        .get(reporting_rates)
+        .then(function(reporting_rate_results) {
 
-                var body = analyticsData;
-                
-                console.log("retrieving " +body.rows.length + " rows for the reporting rates");
-                console.log("body" + body);
-                
-                //shove all this into a object for reading later.
-                 for (var i = 0; i < body.rows.length; i++) {
-                    var dataelement = body.rows[i];
-                    reporting_rates_table[ dataelement[1]+"."+dataelement[0] ] = dataelement[3]; 
-                }
-
-            });
-
-        var period = { month: month_name, year: year};
-
-
-        // Get data for table I
-        d2.analytics.aggregate
-            .get(table1)
-            .then(function(analyticsData) {
-                
-                var body = analyticsData;
-                var dataElements = {};
-                
-                console.log("retrieving " +body.rows.length + " rows for Table I");
+            console.log("retrieving " +reporting_rate_results.rows.length + " rows for the reporting rates");
             
-                //shove all this into a object for reading later.
-                for (var i = 0; i < body.rows.length; i++) {
-                    var dataelement = body.rows[i];
-                    dataElements[ dataelement[0] ] = dataelement[3]; 
-                }
+            var reporting_table = {};
 
-                return dataElements;
-                
-            }).then(function(result){
-                
-                d2.analytics.aggregate
-                    .get(table2)
-                    .then(function(analyticsData) {
-                        //console.log(analyticsData);
-                        var body = analyticsData;
-                        var table2_result = {};
-                        
-                        console.log("retrieving " +body.rows.length + " rows for Table II");
 
-                        //shove all this into a object for reading later.
-                        for (var i = 0; i < body.rows.length; i++) {
-                            var dataelement = body.rows[i];
-                            table2_result[ dataelement[0] ] = dataelement[3]; 
-                        }
+            //shove all this into a object for reading later.
+            for (var i = 0; i < reporting_rate_results.rows.length; i++) {
+                var dataelement = reporting_rate_results.rows[i];
+                reporting_table[ dataelement[1]+"."+dataelement[0] ] = dataelement[3]; 
+            }
 
-                        var top10_table2 = BulletinDownloader.get_highest_incidence(table2_result);
-                        var fake_table2 = BulletinDownloader.get_fake_table2();
-                        var fake_table3 = BulletinDownloader.get_fake_table3();
-                        
-                        var bulletin_data = Object.assign({}, period, result,fake_table2,fake_table3,reporting_rates_table);
+            // Get data for table I
+            d2.analytics.aggregate
+                .get(table1)
+                .then(function(table1_results) {
 
-                        console.log("Here are the final results: " , bulletin_data);
-                        
-                        // Write this out
+                    var table1_data = {};
+                    console.log("retrieving " +table1_results.rows.length + " rows for Table I");
+                   
+                    //shove all this into a object for reading later.
+                    for (var i = 0; i < table1_results.rows.length; i++) {
+                        var dataelement = table1_results.rows[i];
+                        table1_data[ dataelement[0] ] = dataelement[3]; 
+                    }
 
-                        var template_path = "./assets/templates/bulletin.v1.docx";
-                        
-                        if (template == TEMPLATE_UNFORMATTED){
-                            var template_path = "./assets/templates/test.v1.docx";
-                        } 
+                    // Get data for table II
+                    d2.Api.getApi()
+                        .get('/analytics?dimension=dx:zysVdk7PbUx,ou:Ky2CzFdfBuO;LEVEL-5&filter=pe:201901&order=DESC&showHierarchy=true')
+                        .then(function(table2_results) {
 
-                        PizZipUtils.getBinaryContent(template_path,function(error,content){
-    
-                            var zip = new PizZip(content);
-                            var doc=new Docxtemplater().loadZip(zip);
+                            console.log("retrieving " +table2_results.rows.length + " rows for Table II");
+                            console.log(table2_results);
+                            var table2_data = {};
 
-                            doc.setData(bulletin_data);
-
-                            try {
-                                // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-                                doc.render()
-                            }
-                            catch (error) {
-                                var e = {
-                                    message: error.message,
-                                    name: error.name,
-                                    stack: error.stack,
-                                    properties: error.properties,
+                            var j = 1;
+                            //shove all this into a object for reading later.
+                            for (var i = 0; i < table2_results.rows.length; i++) {
+                                
+                                var dataelement = table2_results.rows[i];
+                                
+                                if (dataelement[2] != "Infinity"){
+                                    table2_data["hc"+j+"_name"] = dataelement[0];
+                                    table2_data["hc"+j+"_district"] = dataelement[1];  
+                                    table2_data["hc"+j+"_incidence"] = dataelement[2]; 
+                                    j++;
                                 }
-                                console.log(JSON.stringify({error: e}));
-                                // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-                                throw error;
+
+                                
+                                
                             }
-                            
-                            var out=doc.getZip().generate({
-                                type:"blob",
-                                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            }) //Output the document using Data-URI
-                            saveAs(out,"bulletin.docx")
+
+                            // Get data for table III
+                            d2.analytics.aggregate
+                                .get(table3)
+                                .then(function(table3_results) {
+
+                                    var table3_data = {};
+                                    console.log("retrieving " +table3_results.rows.length + " rows for Table III");
+
+                                     //shove all this into a object for reading later.
+                                    for (var i = 0; i < table3_results.rows.length; i++) {
+                                        var dataelement = table1_results.rows[i];
+                                        table3_data[ dataelement[0] ] = dataelement[3]; 
+                                    }
+
+                                    var bulletin_data = Object.assign({}, period,table1_data,table2_data,table3_data, reporting_table);
+
+                                    console.log("Here are the final results: " , bulletin_data);
+
+
+
+                                });
 
                         });
+                    
 
-                    });
-            })   
+                });
+
+        });   
         
     }
 
@@ -366,6 +265,7 @@ export default class BulletinDownloader extends React.Component {
                                     <p>Cette application est utilisée pour exporter le rapport mensuel sur le paludisme sous forme de document Microsoft Word. Pour commencer, sélectionnez le mois et le bouton.</p>
                                 </Heading>
 
+                        
                                 <PeriodPicker
                                         periodType="Monthly"
                                         onPickPeriod={(value) => {

@@ -1,5 +1,5 @@
 {
-    "version": "0.8.4",
+    "version": "0.8.5",
     "name": "Bulletin Mensuel De Paludisme Exportateur",
     "description": "Exporte le bulletin mensuel sur le paludisme",
     "launch_path": "index.html",
