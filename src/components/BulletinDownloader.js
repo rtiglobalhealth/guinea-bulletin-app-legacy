@@ -5,20 +5,13 @@ import {SinglePanel} from '@dhis2/d2-ui-core';
 import {MainContent} from '@dhis2/d2-ui-core';
 import PropTypes from 'prop-types';
 
-
 import {Heading} from '@dhis2/d2-ui-core';
-
 import {PeriodPicker} from '@dhis2/d2-ui-core';
-
-
-//import DangerPeriodPicker;
 
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip'
 import PizZipUtils from 'pizzip/utils'
-
 import { saveAs } from 'file-saver';
-
 
 const TEMPLATE_FORMATTED = "formatted";
 const TEMPLATE_UNFORMATTED = "unformatted";
@@ -48,11 +41,6 @@ export default class BulletinDownloader extends React.Component {
         super(props, context);
         this.state = {
             d2: props.d2,
-            buttons: '',
-            table1: [],
-            table2: [],
-            table3: [],
-            report_rates_table: []
         }; 
 
         this.generateBulletin = this.generateBulletin.bind(this);
@@ -69,6 +57,7 @@ export default class BulletinDownloader extends React.Component {
 
         var year = this.state.period.substring(0, 4);
         var month = this.state.period.substring(4);
+        var yearmonth = year+month;
         var month_name;
 
         switch(month) {
@@ -126,8 +115,7 @@ export default class BulletinDownloader extends React.Component {
                             'oD8UXdUBhb2', //Palu Total Déces 
                     ]).addPeriodDimension(this.state.period)
                         .addOrgUnitDimension(['Ky2CzFdfBuO']);
-       
-       
+      
 
         const reporting_rates = new this.props.d2.analytics.request()
             .addDataDimension([
@@ -174,7 +162,6 @@ export default class BulletinDownloader extends React.Component {
             
             var reporting_table = {};
 
-
             //shove all this into a object for reading later.
             for (var i = 0; i < reporting_rate_results.rows.length; i++) {
                 var dataelement = reporting_rate_results.rows[i];
@@ -211,14 +198,14 @@ export default class BulletinDownloader extends React.Component {
                                 var dataelement = table2_results.rows[i];
                                 
                                 if (dataelement[2] != "Infinity"){
+                                    // LOook up the facility name
                                     table2_data["hc"+j+"_name"] = dataelement[0];
+                                    // Look up the district name
                                     table2_data["hc"+j+"_district"] = dataelement[1];  
                                     table2_data["hc"+j+"_incidence"] = dataelement[2]; 
                                     j++;
                                 }
-
-                                
-                                
+  
                             }
 
                             // Get data for table III
@@ -238,6 +225,43 @@ export default class BulletinDownloader extends React.Component {
                                     var bulletin_data = Object.assign({}, period,table1_data,table2_data,table3_data, reporting_table);
 
                                     console.log("Here are the final results: " , bulletin_data);
+
+                                    // Write this out
+                                    var template_path = "./assets/templates/bulletin.v1.docx";
+                                    
+                                    if (template == TEMPLATE_UNFORMATTED){
+                                        var template_path = "./assets/templates/test.v1.docx";
+                                    } 
+
+                                    PizZipUtils.getBinaryContent(template_path,function(error,content){
+                
+                                        var zip = new PizZip(content);
+                                        var doc=new Docxtemplater().loadZip(zip);
+
+                                        doc.setData(bulletin_data);
+
+                                        try {
+                                            doc.render()
+                                        }
+                                        catch (error) {
+                                            var e = {
+                                                message: error.message,
+                                                name: error.name,
+                                                stack: error.stack,
+                                                properties: error.properties,
+                                            }
+                                            console.log(JSON.stringify({error: e}));
+                                            // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+                                            throw error;
+                                        }
+                                        
+                                        var out=doc.getZip().generate({
+                                            type:"blob",
+                                            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                        }) //Output the document using Data-URI
+                                        saveAs(out,"bulletin_"+yearmonth+"_"+template+".docx")
+
+                                    });
 
 
 
