@@ -23,6 +23,7 @@
     "d2": "^31.7",
     "docxtemplater": "^3.19.6",
     "docxtemplater-image-module": "https://modules.docxtemplater.com/packages/v2/apreston_rti/91535868-39e4-4833-5d91-bf20abf081b0/image-module-3.7.9.tar.gz",
+    "docxtemplater-style-module": "https://modules.docxtemplater.com/packages/v2/apreston_rti/91535868-39e4-4833-5d91-bf20abf081b0/styling-module-3.3.1.tar.gz",
     "file-saver": "^2.0.2",
     "node-sass": "^4.14.1",
     "pizzip": "^3.0.5",

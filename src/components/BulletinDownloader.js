@@ -136,18 +136,24 @@ export default class BulletinDownloader extends React.Component {
                 'Ky2CzFdfBuO', // Guinea
         ]);
 
-        //const d2Analytics = this.props.d2.analytics.request();
         const table3 = new this.props.d2.analytics.request()
                         .addDataDimension([
-                            'XJ3xpfnj2L7', // Palu cas consultations toutes causes confondues
-                            'hxx05dDDpQS', // Palu cas suspects 
-                            'hqxo1DPKsvM', //Palu cas testés
-                            'FoPRfIPds80', //Palu cas confirmés 
-                            'bdifvrbc9iK', //Palu cas simples traités 
-                            'E1n9SUkhQ6o', //Palu cas graves traités 
-                            'oD8UXdUBhb2', //Palu Total Déces 
+                            'e7KyyoIukNr', //Complétude
+                            'PEGmDlgS54M', // Promptitude
+                            'YgtSVn5FVgI', // % de diagnostic
+                            'CuEP1n3VXW1', // % de traitement
+                            'W0vrEFRVb1J', //% de TPI3  
+                            'FoPRfIPds80', //% de confirmation
+                            'oD8UXdUBhb2', //Palu Total Déces
+                            'F0WFRkrKQIW', // Palu/Toutes Consultations
+                            'ESEPKvpZVCe', // Mois de Stock - TDR
+                            'mooUrkzl7d0',// Mois de Stock - ACT
+                            'zKbvCY1jjdX', // Mois de Stock - SP
+                            // ART
+                            //MILDA
                     ]).addPeriodDimension(this.state.period)
-                        .addOrgUnitDimension(['Ky2CzFdfBuO']);
+                        .addOrgUnitDimension(['Ky2CzFdfBuO'])
+                        .addOrgUnitDimension(['LEVEL-3']);
        
 
         var d2 = this.props.d2;
@@ -188,7 +194,7 @@ export default class BulletinDownloader extends React.Component {
                         .then(function(table2_results) {
 
                             console.log("retrieving " +table2_results.rows.length + " rows for Table II");
-                            console.log(table2_results);
+                            //console.log(table2_results);
                             var table2_data = {};
 
                             var j = 1;
@@ -199,9 +205,11 @@ export default class BulletinDownloader extends React.Component {
                                 
                                 if (dataelement[2] != "Infinity"){
                                     // LOook up the facility name
-                                    table2_data["hc"+j+"_name"] = dataelement[0];
+                                    var outstring = table2_results['metaData']['ouNameHierarchy'][dataelement[1]];
+                                    var parts = outstring.split("/");
+                                    table2_data["hc"+j+"_name"] = parts[5];
                                     // Look up the district name
-                                    table2_data["hc"+j+"_district"] = dataelement[1];  
+                                    table2_data["hc"+j+"_district"] = parts[3];  
                                     table2_data["hc"+j+"_incidence"] = dataelement[2]; 
                                     j++;
                                 }
@@ -214,12 +222,14 @@ export default class BulletinDownloader extends React.Component {
                                 .then(function(table3_results) {
 
                                     var table3_data = {};
+                                    
                                     console.log("retrieving " +table3_results.rows.length + " rows for Table III");
+                                    console.log(table3_results);
 
                                      //shove all this into a object for reading later.
                                     for (var i = 0; i < table3_results.rows.length; i++) {
-                                        var dataelement = table1_results.rows[i];
-                                        table3_data[ dataelement[0] ] = dataelement[3]; 
+                                        var dataelement = table3_results.rows[i];
+                                        table3_data[ dataelement[1]+"."+dataelement[0] ] = dataelement[3];
                                     }
 
                                     var bulletin_data = Object.assign({}, period,table1_data,table2_data,table3_data, reporting_table);
@@ -230,14 +240,14 @@ export default class BulletinDownloader extends React.Component {
                                     var template_path = "./assets/templates/bulletin.v1.docx";
                                     
                                     if (template == TEMPLATE_UNFORMATTED){
-                                        var template_path = "./assets/templates/test.v1.docx";
+                                        var template_path = "./assets/templates/test.v2.docx";
                                     } 
 
                                     PizZipUtils.getBinaryContent(template_path,function(error,content){
                 
                                         var zip = new PizZip(content);
                                         var doc=new Docxtemplater().loadZip(zip);
-
+                                        
                                         doc.setData(bulletin_data);
 
                                         try {
