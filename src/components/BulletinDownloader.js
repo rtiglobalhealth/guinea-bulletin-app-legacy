@@ -11,7 +11,9 @@ import {PeriodPicker} from '@dhis2/d2-ui-core';
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip'
 import PizZipUtils from 'pizzip/utils'
+
 import { saveAs } from 'file-saver';
+
 
 const TEMPLATE_FORMATTED = "formatted";
 const TEMPLATE_UNFORMATTED = "unformatted";
@@ -33,6 +35,60 @@ const styles = {
     }
 };
 
+function initializeDistrictData(indicatorUIDArray){
+
+    var table = {};
+
+    for (const indicatorUID of indicatorUIDArray) {
+
+        //these are the distircts
+        table["q1zvw5TOnZF."+indicatorUID] = "";
+        table["q1zvw5TOnZF."+indicatorUID] = "";
+        table["L1Gr2bAsR4T."+indicatorUID] = "";
+        table["THgRhO9eF0I."+indicatorUID] = "";
+        table["KnR8IiGoSxQ."+indicatorUID] = "";
+        table["GUSZlo8f9t8."+indicatorUID] = "";
+        table["mqBP8r7CwKc."+indicatorUID] = "";
+        table["IPv04VSahDi."+indicatorUID] = "";
+        table["gHO8qPxfLdl."+indicatorUID] = "";
+        table["VyZGMioVY5z."+indicatorUID] = "";
+        table["qmVkCsfziWM."+indicatorUID] = "";
+        table["CXHCAlP68L5."+indicatorUID] = "";
+        table["jiGkwTWpBeq."+indicatorUID] = "";
+        table["Motdz3Bql7L."+indicatorUID] = "";
+        table["khK0Ewyw0vV."+indicatorUID] = "";
+        table["cbst9kz3DHp."+indicatorUID] = "";
+        table["Z71gNmPnc22."+indicatorUID] = "";
+        table["zmSjEUspuVL."+indicatorUID] = "";
+        table["VUj3PJpzty8."+indicatorUID] = "";
+        table["HC3N6HbSdfg."+indicatorUID] = "";
+        table["pChTVBEAPJJ."+indicatorUID] = "";
+        table["kVULorkd7Vt."+indicatorUID] = "";
+        table["dkWnjo1bSrU."+indicatorUID] = "";
+        table["E1AAcXV9PxL."+indicatorUID] = "";
+        table["QL7gnB6sSLA."+indicatorUID] = "";
+        table["GuePjEvd6OH."+indicatorUID] = "";
+        table["TEjr8hbfz9a."+indicatorUID] = "";
+        table["zJZspSfD06r."+indicatorUID] = "";
+        table["LyGsnnzEabg."+indicatorUID] = "";
+        table["ISZZ5m7PYAC."+indicatorUID] = "";
+        table["CoKlGkkiN4a."+indicatorUID] = "";
+        table["jIFb011EBWB."+indicatorUID] = "";
+        table["yvJVq1GjI2A."+indicatorUID] = "";
+        table["ASu054HjT5Y."+indicatorUID] = "";
+        table["D5WJbugzg9L."+indicatorUID] = "";
+        table["QZJuFnb2WZ6."+indicatorUID] = "";
+        table["XraGmJ5tF7e."+indicatorUID] = "";
+        table["C4dKrWoT5au."+indicatorUID] = "";
+        table["PCa6e3khx5E."+indicatorUID] = "2";
+        table["PCa6e3khx5E."+indicatorUID] = "3";
+        table["PCa6e3khx5E."+indicatorUID] = "4";
+
+    }
+
+    return table;
+
+}
 
 export default class BulletinDownloader extends React.Component {
 
@@ -46,7 +102,7 @@ export default class BulletinDownloader extends React.Component {
         this.generateBulletin = this.generateBulletin.bind(this);
     }
 
-  
+   
     
     /* templates can be TEMPLATE_FORMATTED or TEMPLATE_UNFORMATTED*/
     generateBulletin(template) {
@@ -106,23 +162,23 @@ export default class BulletinDownloader extends React.Component {
         //const d2Analytics = this.props.d2.analytics.request();
         const table1 = new this.props.d2.analytics.request()
                         .addDataDimension([
-                            'XJ3xpfnj2L7', // Palu cas consultations toutes causes confondues
-                            'hxx05dDDpQS', // Palu cas suspects 
-                            'hqxo1DPKsvM', //Palu cas testés
-                            'FoPRfIPds80', //Palu cas confirmés 
-                            'bdifvrbc9iK', //Palu cas simples traités 
-                            'E1n9SUkhQ6o', //Palu cas graves traités 
-                            'oD8UXdUBhb2', //Palu Total Déces 
+                            'qYH6Tw7wSJr', // Palu cas consultations toutes causes confondues
+                            'xxMXZDNQhc1', // Palu cas suspects 
+                            'C8uzbGBV5Ba', //Palu cas testés
+                            'ZGVY1P1NNTu', //Palu cas confirmés 
+                            'D0tVMBr7pne', //Palu cas simples traités 
+                             //Palu cas graves traités 
+                            'MW5F0uImS24', //Palu Total Déces
+                            'no9OnzE3Yy7', //complétude
+                            'yM51VVWhtk3' //promptitude
                     ]).addPeriodDimension(this.state.period)
                         .addOrgUnitDimension(['Ky2CzFdfBuO']);
       
 
         const reporting_rates = new this.props.d2.analytics.request()
             .addDataDimension([
-                'nLnLQHxdKXZ', // PALUDISME Actual reports
-                'w1666PUJ8RX', // PALUDISME Expected reports
-                'e7KyyoIukNr', // PALUDISME Reporting rate
-                'PEGmDlgS54M', // PALUDISME Reporting rate on time  
+                'no9OnzE3Yy7', //complétude
+                'yM51VVWhtk3' //promptitude
         ]).addPeriodDimension(this.state.period)
             .addOrgUnitDimension([
                 'D1rT7FToSE4', // Kankan
@@ -138,17 +194,16 @@ export default class BulletinDownloader extends React.Component {
 
         const table3 = new this.props.d2.analytics.request()
                         .addDataDimension([
-                            'e7KyyoIukNr', //Complétude
-                            'PEGmDlgS54M', // Promptitude
-                            'YgtSVn5FVgI', // % de diagnostic
-                            'CuEP1n3VXW1', // % de traitement
-                            'W0vrEFRVb1J', //% de TPI3  
-                            'FoPRfIPds80', //% de confirmation
-                            'oD8UXdUBhb2', //Palu Total Déces
-                            'F0WFRkrKQIW', // Palu/Toutes Consultations
-                            'ESEPKvpZVCe', // Mois de Stock - TDR
-                            'mooUrkzl7d0',// Mois de Stock - ACT
-                            'zKbvCY1jjdX', // Mois de Stock - SP
+                            'no9OnzE3Yy7', //Complétude
+                            'Ih6HJlhmY5d', // % de diagnostic
+                            'PifhiFgcyq1', // % de traitement
+                            'zAhqn2Vwacr', //% de TPI3  
+                             //% de confirmation
+                            'MW5F0uImS24', //Palu Total Déces
+                            'kNmu11OsuGn', // Palu/Toutes Consultations
+                            'nnk0OcCQJm5', // Mois de Stock - TDR
+                            'qUdyYqApz8R',// Mois de Stock - ACT
+                            'lno8U7t5TLI', // Mois de Stock - SP
                             // ART
                             //MILDA
                     ]).addPeriodDimension(this.state.period)
@@ -188,9 +243,9 @@ export default class BulletinDownloader extends React.Component {
                         table1_data[ dataelement[0] ] = dataelement[3]; 
                     }
 
-                    // Get data for table II
+                    // Get data for table II (Taux d'incidence )
                     d2.Api.getApi()
-                        .get('/analytics?dimension=dx:zysVdk7PbUx,ou:Ky2CzFdfBuO;LEVEL-5&filter=pe:201901&order=DESC&showHierarchy=true')
+                        .get('/analytics?dimension=dx:mH24Ynkgo4K,ou:Ky2CzFdfBuO;LEVEL-5&filter=pe:201901&order=DESC&showHierarchy=true')
                         .then(function(table2_results) {
 
                             console.log("retrieving " +table2_results.rows.length + " rows for Table II");
@@ -222,7 +277,10 @@ export default class BulletinDownloader extends React.Component {
                                 .then(function(table3_results) {
 
                                     var table3_data = {};
-                                    
+
+                                    //initialize this (this is empty sometimes) for MW5F0uImS24
+                                    table3_data = initializeDistrictData(["MW5F0uImS24","nnk0OcCQJm5"]); 
+
                                     console.log("retrieving " +table3_results.rows.length + " rows for Table III");
                                     console.log(table3_results);
 
@@ -247,7 +305,7 @@ export default class BulletinDownloader extends React.Component {
                 
                                         var zip = new PizZip(content);
                                         var doc=new Docxtemplater().loadZip(zip);
-                                        
+                                    
                                         doc.setData(bulletin_data);
 
                                         try {
@@ -314,8 +372,9 @@ export default class BulletinDownloader extends React.Component {
                                         </Button>
                                         <Button style={styles.buttons} disabled={!this.state.period} raised color='accent' 
                                             onClick={this.generateBulletin.bind(this, TEMPLATE_UNFORMATTED)}>
-                                                Générer le modèle
+                                                Générer le bulletin non formaté
                                         </Button>
+                                        
 
                                   
                                  </Paper>
