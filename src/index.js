@@ -14,7 +14,7 @@ import './styles.scss';
 getManifest('manifest.webapp')
     .then((manifest) => {
         const baseUrl = manifest.getBaseUrl();
-        config.baseUrl = `${baseUrl}/api/26`;
+        config.baseUrl = `${baseUrl}/api/30`;
         log.info(`Loading: ${manifest.name} v${manifest.version}`);
         log.info(`Built ${manifest.manifest_generated_at}`);
     })
