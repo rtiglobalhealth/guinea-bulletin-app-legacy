@@ -295,7 +295,7 @@ export default class BulletinDownloader extends React.Component {
                                     console.log("Here are the final results: " , bulletin_data);
 
                                     // Write this out
-                                    var template_path = "./assets/templates/bulletin.v1.docx";
+                                    var template_path = "./assets/templates/bulletin.v2.docx";
                                     
                                     if (template == TEMPLATE_UNFORMATTED){
                                         var template_path = "./assets/templates/test.v2.docx";
